@@ -6,22 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="光电子集成电路、光子智能计算、光传感与片上系统集成。北京邮电大学 副教授 chaow 的实验室主页。">
     <style>
-        :root{
-            --bg:#0f1720; --card:#0b1220; --muted:#9aa6b2; --accent:#2dd4bf; --text:#e6eef6;
-            --radius:10px; --glass: rgba(255,255,255,0.03);
-            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        }
+        :root{ --bg:#0f1720; --card:#0b1220; --muted:#9aa6b2; --accent:#2dd4bf; --text:#e6eef6; --radius:10px; --glass: rgba(255,255,255,0.03); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
         *{box-sizing:border-box}
-        body{margin:0; background:linear-gradient(180deg,#071021 0%, #0b1522 100%); color:var(--text);}
+        body{margin:0; background:linear-gradient(180deg,#071021 0%, #0b1522 100%); color:var(--text);} 
         .container{max-width:1100px;margin:36px auto;padding:28px}
         header{display:flex;align-items:center;justify-content:space-between;gap:16px}
         .brand{display:flex;align-items:center;gap:14px}
-        .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#022;}
+        .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#022}
         h1{font-size:20px;margin:0}
         p.lead{margin:0;color:var(--muted)}
-        nav{display:flex;gap:12px;align-items:center}
-        nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
-        nav a:hover{color:var(--text);background:rgba(255,255,255,0.02)}
+        nav{display:flex;gap:8px;align-items:center}
+        nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+        nav a.active{background:rgba(255,255,255,0.03);color:var(--text)}
         .lang-toggle{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
 
         main{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:28px}
@@ -30,16 +26,18 @@
         .muted{color:var(--muted)}
         .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
         .project{background:var(--glass);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
-        .project a{color:var(--accent);text-decoration:none}
 
         aside .card{position:sticky;top:28px}
         footer{margin-top:28px;text-align:center;color:var(--muted);font-size:14px}
 
-        /* bilingual content control */
-        [lang="en"], [lang="zh"]{display:none}
+        /* bilingual control */
+        [lang="en"],[lang="zh"]{display:none}
         .lang-zh [lang="zh"], .lang-en [lang="en"]{display:block}
 
-        /* responsive */
+        /* page views */
+        .view{display:none}
+        .view.active{display:block}
+
         @media (max-width:900px){main{grid-template-columns:1fr}aside{order:2}}
     </style>
 </head>
@@ -53,93 +51,97 @@
                     <p class="lead">光子智能计算 · 光电子集成 · 光传感</p>
                 </div>
             </div>
-            <nav>
-                <a href="#about" data-i18n="about">关于</a>
-                <a href="#work" data-i18n="work">作品</a>
-                <a href="#group" data-i18n="group">团队</a>
+            <nav id="topNav">
+                <a data-page="home" class="nav-link">首页</a>
+                <a data-page="publications" class="nav-link">出版物</a>
+                <a data-page="projects" class="nav-link">项目</a>
+                <a data-page="team" class="nav-link">团队</a>
+                <a data-page="contact" class="nav-link">联系</a>
                 <button class="lang-toggle" id="langBtn" aria-label="切换语言">中文 / EN</button>
             </nav>
         </header>
 
         <main>
-            <section class="card">
-                <!-- Chinese content -->
+            <section class="card view" id="homeView">
                 <div class="lang-zh">
                     <h2 lang="zh">个人与实验室简介</h2>
                     <p lang="zh">我是北京邮电大学副教授、研究员、博士生导师，长期从事光电子集成电路、智能计算、光传感、光互连及片上系统集成方向的研究。以第一作者及共同作者在 Nature Photonics 等发表高水平学术论文 30 余篇，研制世界首台百纳米生物粒子光电智能传感平台，原创性提出百万 TOPS 通用光学计算芯片、架构及系统，申请国家发明专利 10 余项，主持/参与多项国家级重大科研项目。</p>
-
-                    <h3 lang="zh">研究方向</h3>
-                    <ul lang="zh">
-                        <li>光电子集成电路与光子芯片设计</li>
-                        <li>光学智能计算与高性能计算架构（百万 TOPS 光学计算芯片）</li>
-                        <li>光传感与生物粒子光电智能传感平台</li>
-                        <li>光互连与片上系统集成</li>
-                    </ul>
                 </div>
-
-                <!-- English content -->
                 <div class="lang-en">
                     <h2 lang="en">About & Lab</h2>
                     <p lang="en">I am an Associate Professor and Researcher at Beijing University of Posts and Telecommunications, supervising PhD students. My research focuses on photonic/electronic integration, intelligent computation, optical sensing, optical interconnects and system-on-chip integration. I have authored 30+ high-impact papers (including Nature Photonics), developed the world's first sub-100nm bio-particle optoelectronic sensing platform, proposed a million-TOPS general-purpose optical computing chip and architecture, and hold 10+ invention patents.</p>
-
-                    <h3 lang="en">Research Areas</h3>
-                    <ul lang="en">
-                        <li>Photonic integrated circuits & photonic chip design</li>
-                        <li>Optical intelligent computing & high-performance computing architectures (million-TOPS)</li>
-                        <li>Optical sensing & bio-particle optoelectronic sensing platforms</li>
-                        <li>Optical interconnects & SoC integration</li>
-                    </ul>
                 </div>
             </section>
 
-            <aside>
-                <div class="card">
-                    <h3 data-i18n="contact">联系 / Contact</h3>
-                    <p class="muted"><a href="https://chaow.github.io" target="_blank" rel="noopener">chaow.github.io</a></p>
-                    <p class="muted"><a href="mailto:chaow@bupt.edu.cn">chaow@bupt.edu.cn</a></p>
-                    <p class="muted">北京邮电大学</p>
+            <section class="card view" id="publicationsView">
+                <div class="lang-zh">
+                    <h2 lang="zh">出版物</h2>
+                    <p class="muted" lang="zh">（按时间排序，点击链接查看详情）</p>
+                    <ol>
+                        <li><strong>示例论文 1</strong> — 期刊名，年份。 <span class="muted">(占位)</span></li>
+                        <li><strong>示例论文 2</strong> — 期刊名，年份。 <span class="muted">(占位)</span></li>
+                    </ol>
                 </div>
+                <div class="lang-en">
+                    <h2 lang="en">Publications</h2>
+                    <p class="muted" lang="en">(Chronological, click links for details)</p>
+                    <ol>
+                        <li><strong>Sample Paper 1</strong> — Journal, Year. <span class="muted">(placeholder)</span></li>
+                        <li><strong>Sample Paper 2</strong> — Journal, Year. <span class="muted">(placeholder)</span></li>
+                    </ol>
+                </div>
+            </section>
 
-                <div class="card" style="margin-top:12px">
-                    <h3 data-i18n="work_short">代表成果</h3>
+            <section class="card view" id="projectsView">
+                <div class="lang-zh">
+                    <h2 lang="zh">项目</h2>
+                    <p class="muted" lang="zh">（示例与演示链接）</p>
                     <div class="grid">
-                        <div class="project">
-                            <strong>百万 TOPS 光学计算芯片</strong>
-                            <div class="muted">通用光学计算芯片与系统架构</div>
-                        </div>
-                        <div class="project">
-                            <strong>百纳米光电传感平台</strong>
-                            <div class="muted">纳米级生物粒子检测示范</div>
-                        </div>
+                        <div class="project"><strong>百万 TOPS 光学计算芯片</strong><div class="muted">通用光学计算芯片与系统架构</div></div>
+                        <div class="project"><strong>百纳米光电传感平台</strong><div class="muted">纳米级生物粒子检测示范</div></div>
                     </div>
                 </div>
-            </aside>
-        </main>
+                <div class="lang-en">
+                    <h2 lang="en">Projects</h2>
+                    <p class="muted" lang="en">(Demos and project pages)</p>
+                    <div class="grid">
+                        <div class="project"><strong>Million-TOPS Optical Compute Chip</strong><div class="muted">General optical compute chip and system</div></div>
+                        <div class="project"><strong>Sub-100nm Optoelectronic Sensor</strong><div class="muted">Bio-particle detection platform</div></div>
+                    </div>
+                </div>
+            </section>
 
-        <section class="card" style="margin-top:20px">
-            <div class="lang-zh">
-                <h2 lang="zh">团队（Group）</h2>
-                <p lang="zh">研究目标与战略定位：在北京邮电大学校长徐坤教授的带领下，研究团队围绕光电子智能核心技术，聚焦世界光学感知与智能计算科技前沿，致力于以人工智能算力硬件与光子芯片为代表的国家重大战略需求相关新技术研究，构建突破冯诺依曼瓶颈的下一代新型信息计算处理架构和光子智能计算芯片。</p>
-                <div class="grid" style="margin-top:12px">
-                    <div class="project"><strong>chaow</strong><div class="muted">副教授 / 研究员 / 博导</div></div>
-                    <div class="project"><strong>A</strong><div class="muted">成员</div></div>
-                    <div class="project"><strong>B</strong><div class="muted">成员</div></div>
-                    <div class="project"><strong>C</strong><div class="muted">成员</div></div>
-                    <div class="project"><strong>D</strong><div class="muted">成员</div></div>
+            <section class="card view" id="teamView">
+                <div class="lang-zh">
+                    <h2 lang="zh">团队</h2>
+                    <p lang="zh">研究目标与战略定位：在北京邮电大学校长徐坤教授的带领下，研究团队围绕光电子智能核心技术，聚焦世界光学感知与智能计算科技前沿，致力于以人工智能算力硬件与光子芯片为代表的国家重大战略需求相关新技术研究。</p>
+                    <div class="grid" style="margin-top:12px">
+                        <div class="project"><strong>chaow</strong><div class="muted">副教授 / 研究员 / 博导</div></div>
+                        <div class="project"><strong>A</strong><div class="muted">成员</div></div>
+                        <div class="project"><strong>B</strong><div class="muted">成员</div></div>
+                        <div class="project"><strong>C</strong><div class="muted">成员</div></div>
+                        <div class="project"><strong>D</strong><div class="muted">成员</div></div>
+                    </div>
                 </div>
-            </div>
-            <div class="lang-en">
-                <h2 lang="en">Group</h2>
-                <p lang="en">Research goals & strategy: Led by President Xu Kun, our team focuses on core photonic intelligence technologies, aiming at global frontiers in optical sensing and intelligent computing. We develop AI compute hardware and photonic chips to address national strategic needs and build next-generation computing architectures to overcome von Neumann bottlenecks.</p>
-                <div class="grid" style="margin-top:12px">
-                    <div class="project"><strong>chaow</strong><div class="muted">Associate Professor / Researcher / PhD Advisor</div></div>
-                    <div class="project"><strong>A</strong><div class="muted">Member</div></div>
-                    <div class="project"><strong>B</strong><div class="muted">Member</div></div>
-                    <div class="project"><strong>C</strong><div class="muted">Member</div></div>
-                    <div class="project"><strong>D</strong><div class="muted">Member</div></div>
+                <div class="lang-en">
+                    <h2 lang="en">Team</h2>
+                    <p lang="en">Research goals & strategy: Led by President Xu Kun, the team focuses on core photonic intelligence technologies, targeting optical sensing and intelligent computing frontiers.</p>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section class="card view" id="contactView">
+                <div class="lang-zh">
+                    <h2 lang="zh">联系</h2>
+                    <p class="muted" lang="zh">访问： <a href="https://chaow.github.io" target="_blank">chaow.github.io</a></p>
+                    <p class="muted" lang="zh">邮箱： <a href="mailto:chaow@bupt.edu.cn">chaow@bupt.edu.cn</a></p>
+                </div>
+                <div class="lang-en">
+                    <h2 lang="en">Contact</h2>
+                    <p class="muted" lang="en">Website: <a href="https://chaow.github.io" target="_blank">chaow.github.io</a></p>
+                    <p class="muted" lang="en">Email: <a href="mailto:chaow@bupt.edu.cn">chaow@bupt.edu.cn</a></p>
+                </div>
+            </section>
+        </main>
 
         <footer>
             <p class="muted">© chaow · 北京邮电大学</p>
@@ -148,27 +150,52 @@
 
     <script>
         (function(){
-            const root = document.documentElement;
             const page = document.getElementById('page');
+            const links = Array.from(document.querySelectorAll('.nav-link'));
+            const views = {
+                home: document.getElementById('homeView'),
+                publications: document.getElementById('publicationsView'),
+                projects: document.getElementById('projectsView'),
+                team: document.getElementById('teamView'),
+                contact: document.getElementById('contactView')
+            };
+
+            function setActive(pageKey, push){
+                Object.values(views).forEach(v=>v.classList.remove('active'));
+                if(views[pageKey]) views[pageKey].classList.add('active');
+                links.forEach(a=>{ a.classList.toggle('active', a.dataset.page===pageKey); });
+                if(push) history.pushState({page:pageKey}, '', '#'+pageKey);
+            }
+
+            // nav clicks
+            links.forEach(a=>{
+                a.addEventListener('click', ()=>{
+                    setActive(a.dataset.page, true);
+                });
+            });
+
+            // initial page from hash
+            const initial = location.hash ? location.hash.replace('#','') : 'home';
+            setActive(initial, false);
+
+            // handle back/forward
+            window.addEventListener('popstate', (e)=>{
+                const p = (location.hash && location.hash.replace('#','')) || 'home';
+                setActive(p, false);
+            });
+
+            // language toggle
             const btn = document.getElementById('langBtn');
             const stored = localStorage.getItem('site-lang') || 'zh';
-            function apply(lang){
+            function applyLang(lang){
                 page.classList.remove('lang-zh','lang-en');
                 page.classList.add(lang==='en'?'lang-en':'lang-zh');
                 btn.textContent = lang==='en'? 'EN / 中文' : '中文 / EN';
                 localStorage.setItem('site-lang', lang);
             }
-            apply(stored==='en'?'en':'zh');
-            btn.addEventListener('click', ()=>{
-                const current = localStorage.getItem('site-lang')==='en'?'en':'zh';
-                apply(current==='en'?'zh':'en');
-            });
-            // set lang attribute for accessibility
-            const observer = new MutationObserver(()=>{
-                if(page.classList.contains('lang-en')){ document.documentElement.lang='en'; }
-                else{ document.documentElement.lang='zh-CN'; }
-            });
-            observer.observe(page,{attributes:true,attributeFilter:['class']});
+            applyLang(stored==='en'?'en':'zh');
+            btn.addEventListener('click', ()=>{ const current = localStorage.getItem('site-lang')==='en'?'en':'zh'; applyLang(current==='en'?'zh':'en'); });
+
         })();
     </script>
 </body>
