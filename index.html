@@ -1,16 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>我的个人网站</title>
+    <meta charset="utf-8" />
+    <title>chaow 的个人网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        h1 { color: #2c3e50; }
-        p { color: #7f8c8d; }
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; color: #333; line-height: 1.6; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #2c3e50; margin-bottom: 6px; }
+        p.lead { color: #7f8c8d; margin-top: 0; }
+        nav { text-align: center; margin: 20px 0; }
+        nav a { margin: 0 10px; color: #2980b9; text-decoration: none; }
+        section { margin: 30px 0; padding: 20px; border-radius: 8px; background: #fbfcfd; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        h2 { color: #34495e; margin-top: 0; }
+        .projects, .group { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .card { padding: 12px; border: 1px solid #e6e9ee; border-radius: 6px; background: #fff; }
+        .muted { color: #7f8c8d; font-size: 0.95em; }
+        footer { text-align: center; color: #95a5a6; font-size: 0.9em; margin-top: 40px; }
+        a.button { display:inline-block; padding:8px 12px; background:#2980b9; color:#fff; border-radius:6px; text-decoration:none; }
     </style>
 </head>
 <body>
-    <h1>你好，我是张三！</h1>
-    <p>这是我在 GitHub Pages 上的第一个个人网站 🌟</p>
-    <p>未来我会在这里分享技术、生活与成长～</p>
+    <header>
+        <h1>你好，我是 chaow！</h1>
+        <p class="lead">北京邮电大学副教授、研究员、博士生导师 — 在这里我与团队分享光电子集成电路与光子智能计算相关的研究与成果。</p>
+        <nav>
+            <a href="#about">关于实验室</a> |
+            <a href="#work">我的作品</a> |
+            <a href="#group">我们的团队</a>
+        </nav>
+    </header>
+
+    <section id="about" aria-labelledby="about-heading">
+        <h2 id="about-heading">个人与实验室简介</h2>
+        <p>
+            我是北京邮电大学副教授、研究员、博士生导师，长期从事光电子集成电路、智能计算、光传感、光互连及片上系统集成方向的研究。
+            以第一作者及共同作者在 Nature Photonics 等期刊发表高水平学术论文 30 余篇，研制世界首台百纳米生物粒子光电智能传感平台，
+            原创性提出百万 TOPS 通用光学计算芯片、架构及系统，已申请国家发明专利 10 余项，主持/参与多项国家级重大与重点科研项目。
+        </p>
+        <h3>研究方向</h3>
+        <ul>
+            <li>光电子集成电路与光子芯片设计</li>
+            <li>光学智能计算与高性能计算架构（百万 TOPS 光学计算芯片）</li>
+            <li>光传感与生物粒子光电智能传感平台</li>
+            <li>光互连与片上系统集成</li>
+        </ul>
+    </section>
+
+    <section id="work" aria-labelledby="work-heading">
+        <h2 id="work-heading">我的作品（Work）</h2>
+        <p class="muted">以下为部分代表性成果与项目（占位：可替换为论文/项目的详细链接与演示）。</p>
+        <div class="projects">
+            <div class="card">
+                <strong>百万 TOPS 通用光学计算芯片与架构</strong>
+                <p class="muted">原创性提出并验证了面向通用算力的光学计算芯片、系统架构及示范平台。</p>
+                <p><a class="button" href="#" target="_blank" rel="noopener">查看详情</a></p>
+            </div>
+            <div class="card">
+                <strong>百纳米生物粒子光电智能传感平台</strong>
+                <p class="muted">研制世界首台实现纳米级生物粒子检测的光电智能传感平台。</p>
+                <p><a class="button" href="#" target="_blank" rel="noopener">查看详情</a></p>
+            </div>
+            <div class="card">
+                <strong>光互连与片上系统集成示范</strong>
+                <p class="muted">面向后摩尔时代的高带宽低功耗互连技术与集成示范。</p>
+                <p><a class="button" href="#" target="_blank" rel="noopener">查看详情</a></p>
+            </div>
+        </div>
+        <p class="muted" style="margin-top:12px;">如果你提供论文链接、演示视频或项目仓库，我会将"查看详情"链接替换为真实地址并添加封面截图。</p>
+    </section>
+
+    <section id="group" aria-labelledby="group-heading">
+        <h2 id="group-heading">团队（Group）</h2>
+        <p>
+            研究目标与战略定位：在北京邮电大学校长徐坤教授的带领下，研究团队围绕光电子智能核心技术，聚焦世界光学感知与智能计算科技前沿，致力于以人工智能算力硬件与光子芯片为代表的国家重大战略需求相关新技术研究。
+            团队旨在构建突破冯诺依曼瓶颈的下一代新型信息计算处理架构和光子智能计算芯片，解决后摩尔时代芯片发展中的算力瓶颈问题，支撑国家人工智能战略需求。
+        </p>
+        <div class="group">
+            <div class="card">
+                <strong>chaow</strong>
+                <p class="muted">副教授、研究员、博士生导师 — 主要负责实验室总体研究规划与课题推进。</p>
+                <p><a href="https://github.com/wwwpi" target="_blank" rel="noopener">GitHub</a></p>
+            </div>
+            <div class="card">
+                <strong>A</strong>
+                <p class="muted">团队成员 A — 职务/研究方向（占位）。</p>
+            </div>
+            <div class="card">
+                <strong>B</strong>
+                <p class="muted">团队成员 B — 职务/研究方向（占位）。</p>
+            </div>
+            <div class="card">
+                <strong>C</strong>
+                <p class="muted">团队成员 C — 职务/研究方向（占位）。</p>
+            </div>
+            <div class="card">
+                <strong>D</strong>
+                <p class="muted">团队成员 D — 职务/研究方向（占位）。</p>
+            </div>
+        </div>
+        <p class="muted" style="margin-top:12px;">如需我为每位成员添加头像、简介或链接，请提供具体信息，我会更新页面。</p>
+    </section>
+
+    <footer>
+        <p>联系：在 GitHub 上关注 <a href="https://github.com/wwwpi" target="_blank" rel="noopener">@wwwpi</a> 或发送邮件到 <a href="mailto:chaow@example.com">chaow@example.com</a>（可替换为真实邮箱）。</p>
+        <p class="muted">© chaow</p>
+    </footer>
 </body>
 </html>
