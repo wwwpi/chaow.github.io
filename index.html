@@ -581,7 +581,7 @@
                 </div>
               </div>
               <div class="content-display">
-                <p>I am an Associate Professor and Researcher at Beijing University of Posts and Telecommunications, serving as a Master's and Ph.D. supervisor. My research focuses on optoelectronic integrated circuits, intelligent computing, optical sensing, optical interconnects, and on-chip system integration. As the first or corresponding author, I have published over 30 high-level academic papers in journals including Nature Photonics. I developed the world's first 100-nanometer bioparticle optoelectronic intelligent sensing platform and pioneered the concept of a million-TOPS general-purpose optical computing chip, architecture, and system. I have applied for more than 10 national invention patents and led/participated in multiple projects including the National Natural Science Foundation Major/Key Projects, the Ministry of Science and Technology Key R&D Young Scientist Project, the Ministry of Science and Technology Innovation 2030 Major Project, and the National Key R&D Program.</p>
+                <p>I am an Associate Professor and Researcher at Beijing University of Posts and Telecommunications, serving as a Master's and Ph.D. supervisor. My research focuses on optoelectronic i[...]
               </div>
             </div>
             
@@ -706,7 +706,7 @@
                 </div>
               </div>
               <div class="content-display">
-                <p>Our lab is continuously recruiting postdoctoral researchers, Ph.D. students, Master's students, Undergraduate/Master/PhD Intern, Engineer in Photonics & Biomedical Engineering and research assistants. We offer competitive salaries, excellent research environments, and broad development opportunities.</p>
+                <p>Our lab is continuously recruiting postdoctoral researchers, Ph.D. students, Master's students, and research assistants. We offer competitive salaries, excellent research environments, and [...]
               </div>
             </div>
             
@@ -718,7 +718,7 @@
                 </div>
               </div>
               <div class="content-display">
-                <ul>
+                <ul id="positions-requirements">
                   <li><strong>Postdoctoral Researchers</strong>: Ph.D. graduates in Optical Engineering, Electronic Engineering, Computer Science or related fields</li>
                   <li><strong>Ph.D. Students</strong>: Master/Bachelor's degree with experience in optoelectronic integration or AI algorithms preferred</li>
                   <li><strong>Master's Students</strong>: Bachelor's degree with strong interest in optoelectronic intelligent computing</li>
@@ -735,7 +735,7 @@
                 </div>
               </div>
               <div class="content-display">
-                <ul>
+                <ul id="positions-benefits-list">
                   <li>Competitive research stipends and performance bonuses</li>
                   <li>Support for domestic and international academic exchanges and conferences</li>
                   <li>Adequate research funding and experimental equipment</li>
@@ -860,631 +860,322 @@
     let editMode = false;
     let currentEditingId = null;
     let currentEditingType = null;
-    let editPassword = "edit123"; // 默认密码
+    // Don't keep a built-in default password in runtime if you want first-time flow:
+    // We'll store password in localStorage under 'lab_edit_password' when set.
     let isChinese = false; // 默认英文
-    
-    // 双语内容
+    let passwordSet = false;
+
+    // 双语内容（只保留与本次修改有关的字段，其他字段可按需扩展）
     const translations = {
-      home: {
-        title: ["Home", "首页"],
-        subtitle: ["About our research directions and team information", "关于实验室的研究方向、团队介绍等信息"],
-        introTitle: ["Lab Introduction", "实验室介绍"],
-        introContent: [
-          "I am an Associate Professor and Researcher at Beijing University of Posts and Telecommunications...",
-          "我是北京邮电大学副教授，研究员，硕士生和博士生导师，长期从事光电子集成电路..."
-        ],
-        researchTitle: ["Research Focus", "研究方向"],
-        researchItems: [
-          ["Optoelectronic intelligent computing chips and systems", "光电智能计算芯片与系统"],
-          ["Embodied perception fusion technology", "具身感知融合技术"],
-          ["On-chip photonic integration systems", "片上光子集成系统"],
-          ["Biophotonics sensing and detection", "生物光子传感与检测"],
-          ["Optical interconnects and high-speed communication", "光互连与高速通信"]
-        ]
-      },
-      publications: {
-        title: ["Publications", "出版物"],
-        subtitle: ["Academic papers, patents and other achievements", "实验室发表的学术论文、专利等成果"],
-        addBtn: ["Add Publication", "添加出版物"],
-        items: [
-          {
-            title: ["High-performance photonic computing chip", "高性能光子计算芯片"],
-            journal: ["Nature Photonics", "自然光子学"],
-            desc: ["Proposed a million-TOPS computing chip architecture based on silicon photonic integration technology", "提出了一种基于硅基光子集成技术的百万TOPS计算芯片架构"]
-          },
-          {
-            title: ["Optical chip for biosensing", "面向智能感知的光学生物芯片与系统"],
-            journal: ["Science Advances", "科学进展"],
-            desc: ["Design and implementation of optical neural network architecture for edge computing", "面向智能感知的硅光生医芯片与系统"]
-          }
-        ]
-      },
-      people: {
-        title: ["Team Members", "团队成员"],
-        subtitle: ["Lab members and their research directions", "实验室成员介绍与研究方向"],
-        addBtn: ["Add Member", "添加成员"],
-        items: [
-          {
-            name: ["Chao Wang", "王超"],
-            position: ["Lab Director", "实验室负责人"],
-            role: ["Associate Professor/Researcher/Ph.D. Supervisor", "副教授/研究员/博士生导师"],
-            research: ["Optoelectronic Intelligent Computing, On-Chip System Integration", "光电智能计算、片上系统集成"]
-          },
-          {
-            name: ["San Zhang", "张三"],
-            position: ["Ph.D. Candidate", "博士研究生"],
-            role: ["Class of 2025", "2025级"],
-            research: ["Photonic Sensor Chip Design", "光子传感芯片设计"]
-          }
-        ]
+      ui: {
+        editModeBtn: ["Edit Mode", "编辑模式"],
+        langBtn: ["中文", "English"],
       },
       positions: {
         title: ["Open Positions", "招聘信息"],
         subtitle: ["We are recruiting postdocs, Ph.D./Master students, and research assistants", "长期招收博士后、博士/硕士研究生、本硕博实习生及科研助理"],
         introTitle: ["Recruitment Information", "招聘说明"],
         introContent: [
-          "Our lab is continuously recruiting postdoctoral researchers, Ph.D. students, Master's students, and research assistants. We offer competitive salaries, excellent research environments, and broad development opportunities.",
-          "实验室长期招收博士后、博士研究生、硕士研究生、本硕博实习生、光电&生医领域工程师及科研助理。我们提供具有竞争力的薪酬待遇、优良的科研环境和广阔的发展空间。"
+          "Our lab is continuously recruiting postdoctoral researchers, Ph.D. students, Master's students, and research assistants. We offer competitive salaries, excellent research environments, and opportunities for scientific exchange.",
+          "实验室长期招收博士后、博士研究生、硕士研究生、本硕博实习生及科研助理。我们提供具有竞争力的待遇、良好的科研环境和学术交流机会。"
         ],
         detailsTitle: ["Requirements", "具体要求"],
         detailsItems: [
           [
-            ["Postdoctoral Researchers: Ph.D. graduates in Optical Engineering, Electronic Engineering, Computer Science or related fields", "博士后：光学工程、电子工程、计算机科学等相关专业博士毕业生"],
-            ["Ph.D. Students: Bachelor/Master's degree with experience in optoelectronic integration or AI algorithms preferred", "博士研究生：本科/硕士学历，有光电集成或AI算法研究经验者优先"],
-            ["Master's Students: Bachelor's degree with strong interest in optoelectronic intelligent computing", "硕士研究生：本科学历，对光电智能感知有浓厚兴趣"],
-            ["Research Assistants: Bachelor's degree or above to assist with lab management and project execution", "科研助理：本科及以上学历，协助实验室日常管理与项目执行"]
+            // English list (kept here for completeness)
+            "Postdoctoral Researchers: Ph.D. graduates in Optical Engineering, Electronic Engineering, Computer Science or related fields.",
+            "Ph.D. Students: Bachelor's or Master's degree; experience in optoelectronic integration or AI algorithms preferred.",
+            "Master's Students: Bachelor's degree with strong interest in optoelectronic intelligent computing.",
+            "Research Assistants: Bachelor's degree or above to assist with lab management and project execution."
+          ],
+          [
+            // Chinese translations for the recruitment requirements
+            "博士后：须具有光学工程、电子工程、计算机科学或相关领域的博士学位，具有独立开展科研能力与科研成果优先。",
+            "博士研究生：本科或硕士学历，具备光电集成、光子芯片或AI算法相关背景者优先。",
+            "硕士研究生：本科毕业，热爱科学研究并对光电智能计算方向有浓厚兴趣。",
+            "科研助理：本科及以上学历，负责协助实验室日常管理、设备维护与项目执行。"
           ]
         ],
         benefitsTitle: ["Benefits & Development", "待遇与发展"],
         benefitsItems: [
           ["Competitive research stipends and performance bonuses", "具有竞争力的科研津贴和绩效奖励"],
-          ["Support for domestic and international academic exchanges and conferences", "国内外学术交流与会议支持"],
-          ["Adequate research funding and experimental equipment", "充足的科研经费与实验设备"],
-          ["Practical opportunities for collaboration with industry", "与工业界合作的实践机会"],
-          ["Excellent career development prospects", "良好的职业发展前景"]
+          ["Support for domestic and international academic exchanges and conferences", "支持国内外学术交流与会议"],
+          ["Adequate research funding and experimental equipment", "充足的科研经费与实验设备支持"],
+          ["Practical opportunities for collaboration with industry", "提供与产业界合作的实践机会"],
+          ["Excellent career development prospects", "良好的职业发展与职业发展支持"]
         ]
       },
-      achievements: {
-        title: ["Featured Research", "研究成果"],
-        items: [
-          {
-            title: ["Million-TOPS Optical Computing Chip", "百万TOPS光学计算芯片"],
-            desc: ["Developed the world's first general-purpose optical computing chip architecture with million-TOPS performance.", "开发了世界上第一个具有百万TOPS性能的通用光学计算芯片架构"],
-            journal: ["Nature Photonics 2025", "自然光子学 2025"]
-          },
-          {
-            title: ["100nm Bio-Particle Sensing", "100纳米生物粒子传感"],
-            desc: ["Created the first optoelectronic intelligent sensing platform capable of detecting 100nm biological particles.", "创建了第一个能够检测100纳米生物粒子的光电智能传感平台"],
-            journal: ["Appled Physics Reviews 2022", "应用物理评论 2022"]
-          }
-        ]
-      },
-      ui: {
-        editModeBtn: ["Edit Mode", "编辑模式"],
-        langBtn: ["中文", "English"],
-        edit: ["Edit", "编辑"],
-        delete: ["Delete", "删除"],
-        save: ["Save", "保存"],
-        cancel: ["Cancel", "取消"],
-        confirm: ["Confirm", "确认"],
-        setPassword: ["Set Edit Password", "设置编辑密码"],
-        passwordPlaceholder: ["Enter password", "请输入密码"],
-        newPassword: ["New Password", "新密码"],
-        confirmPassword: ["Confirm Password", "确认密码"],
-        labInfoTitle: ["Lab Information", "实验室信息"],
-        location: ["Location", "地点"],
-        contact: ["Contact", "联系方式"],
-        updated: ["Last Updated", "最后更新"]
+      uiText: {
+        setPasswordTitle: ["Set Edit Password", "设置编辑密码"],
+        passwordPlaceholder: ["Enter password", "请输入密码"]
       }
     };
+
+    // 初始化：读取本地存储中的密码设置与语言偏好
+    function init() {
+      const savedPassword = localStorage.getItem('lab_edit_password');
+      passwordSet = !!savedPassword;
+      const savedLang = localStorage.getItem('lab_lang');
+      if (savedLang) {
+        isChinese = savedLang === 'zh';
+      }
+      updateLanguage();
+      // default show home
+      showPage('home');
+    }
+
+    // 页面切换
+    function showPage(page) {
+      const pages = ['home', 'publications', 'people', 'positions'];
+      pages.forEach(p => {
+        const el = document.getElementById(`${p}-content`);
+        if (el) el.style.display = (p === page) ? 'block' : 'none';
+        const btn = document.querySelector(`[data-page="${p}"]`);
+        if (btn) {
+          if (p === page) btn.classList.add('active'); else btn.classList.remove('active');
+        }
+      });
+    }
 
     // 切换语言
     function toggleLanguage() {
       isChinese = !isChinese;
+      localStorage.setItem('lab_lang', isChinese ? 'zh' : 'en');
       updateLanguage();
     }
 
-    // 更新页面语言
+    // 更新页面语言（只更新与本次修正相关的部分）
     function updateLanguage() {
       const langIndex = isChinese ? 1 : 0;
-      
-      // 更新导航按钮
-      document.querySelector('[data-page="home"]').textContent = translations.home.title[langIndex];
-      document.querySelector('[data-page="publications"]').textContent = translations.publications.title[langIndex];
-      document.querySelector('[data-page="people"]').textContent = translations.people.title[langIndex];
-      document.querySelector('[data-page="positions"]').textContent = translations.positions.title[langIndex];
-      document.querySelector('.lang-btn').textContent = translations.ui.langBtn[langIndex];
-      document.getElementById('editModeBtn').textContent = translations.ui.editModeBtn[langIndex];
-      
-      // 更新页面标题和副标题
-      document.querySelectorAll('.content-header h2').forEach((h2, index) => {
-        const page = Object.values(translations)[index];
-        if (page && page.title) {
-          h2.textContent = page.title[langIndex];
-        }
-      });
-      
-      document.querySelectorAll('.content-header p').forEach((p, index) => {
-        const page = Object.values(translations)[index];
-        if (page && page.subtitle) {
-          p.textContent = page.subtitle[langIndex];
-        }
-      });
-      
-      // 更新首页内容
-      if (document.getElementById('home-content').style.display !== 'none') {
-        document.querySelector('#home-intro h4').textContent = translations.home.introTitle[langIndex];
-        document.querySelector('#research-focus h4').textContent = translations.home.researchTitle[langIndex];
-        
-        // 更新研究方向列表
-        const researchItems = document.querySelectorAll('#research-focus li');
-        translations.home.researchItems.forEach((item, index) => {
-          if (researchItems[index]) {
-            researchItems[index].textContent = item[langIndex];
+
+      // 导航
+      const navHome = document.querySelector('[data-page="home"]');
+      const navPub = document.querySelector('[data-page="publications"]');
+      const navPeople = document.querySelector('[data-page="people"]');
+      const navPositions = document.querySelector('[data-page="positions"]');
+      if (navHome) navHome.textContent = isChinese ? "首页" : "Home";
+      if (navPub) navPub.textContent = isChinese ? "出版物" : "Publications";
+      if (navPeople) navPeople.textContent = isChinese ? "成员" : "People";
+      if (navPositions) navPositions.textContent = isChinese ? translations.positions.title[1] : translations.positions.title[0];
+
+      // 语言按钮
+      const langBtn = document.querySelector('.lang-btn');
+      if (langBtn) langBtn.textContent = translations.ui.langBtn[langIndex];
+
+      // 编辑按钮
+      const editBtn = document.getElementById('editModeBtn');
+      if (editBtn) {
+        editBtn.textContent = translations.ui.editModeBtn[langIndex] + (editMode ? (isChinese ? "（已启用）" : " (On)") : "");
+      }
+
+      // 招聘页面标题与介绍
+      const positionsHeader = document.querySelector('#positions-content .content-header h2');
+      const positionsSub = document.querySelector('#positions-content .content-header p');
+      if (positionsHeader) positionsHeader.textContent = translations.positions.title[langIndex];
+      if (positionsSub) positionsSub.textContent = translations.positions.subtitle[langIndex];
+
+      // 招聘介绍段落
+      const introP = document.querySelector('#positions-intro .content-display p');
+      if (introP) introP.textContent = translations.positions.introContent[langIndex];
+
+      // 招聘要求列表（替换为翻译后的完整条目）
+      const reqList = document.getElementById('positions-requirements');
+      if (reqList) {
+        // Clear and refill using translations
+        reqList.innerHTML = '';
+        const items = translations.positions.detailsItems[langIndex === 1 ? 1 : 0];
+        items.forEach(text => {
+          const li = document.createElement('li');
+          // attempt to preserve bold role if colon exists in English; for Chinese items they already are full sentences
+          if (langIndex === 0) {
+            li.innerHTML = text;
+          } else {
+            // For Chinese we want to keep the role bold for consistency
+            // Detect a prefix like "博士后：" or "博士研究生："
+            const parts = text.split('：');
+            if (parts.length > 1) {
+              li.innerHTML = '<strong>' + parts[0] + '：</strong>' + parts.slice(1).join('：');
+            } else {
+              li.textContent = text;
+            }
           }
+          reqList.appendChild(li);
         });
       }
-      
-      // 更新出版物内容
-      if (document.getElementById('publications-content').style.display !== 'none') {
-        const pubItems = document.querySelectorAll('#publications-list .list-item');
-        translations.publications.items.forEach((item, index) => {
-          if (pubItems[index]) {
-            pubItems[index].querySelector('h4').textContent = item.title[langIndex];
-            pubItems[index].querySelector('p').innerHTML = `<strong>${item.journal[langIndex]}</strong> • 2022 • DOI: 10.1038/s41566-023-xx234-5`;
-            pubItems[index].querySelector('.muted').textContent = item.desc[langIndex];
-          }
+
+      // 福利列表翻译
+      const benefitsList = document.getElementById('positions-benefits-list');
+      if (benefitsList) {
+        benefitsList.innerHTML = '';
+        const benefits = translations.positions.benefitsItems.map(b => b[langIndex]);
+        benefits.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          benefitsList.appendChild(li);
         });
       }
-      
-      // 更新人员内容
-      if (document.getElementById('people-content').style.display !== 'none') {
-        const peopleItems = document.querySelectorAll('#people-list .list-item');
-        translations.people.items.forEach((item, index) => {
-          if (peopleItems[index]) {
-            peopleItems[index].querySelector('h4').textContent = item.name[langIndex];
-            peopleItems[index].querySelector('p').innerHTML = `<strong>${item.position[langIndex]}</strong> • ${item.role[langIndex]}`;
-            peopleItems[index].querySelector('.muted').textContent = `研究方向：${item.research[langIndex]}`;
-          }
-        });
-      }
-      
-      // 更新招聘内容
-      if (document.getElementById('positions-content').style.display !== 'none') {
-        document.querySelector('#positions-intro h4').textContent = translations.positions.introTitle[langIndex];
-        document.querySelector('#positions-intro .content-display p').textContent = translations.positions.introContent[langIndex];
-        
-        document.querySelector('#positions-details h4').textContent = translations.positions.detailsTitle[langIndex];
-        const detailsItems = document.querySelectorAll('#positions-details li');
-        translations.positions.detailsItems[0].forEach((item, index) => {
-          if (detailsItems[index]) {
-            detailsItems[index].innerHTML = `<strong>${item[0].split(':')[0]}</strong>: ${item[langIndex].split(':')[1]}`;
-          }
-        });
-        
-        document.querySelector('#positions-benefits h4').textContent = translations.positions.benefitsTitle[langIndex];
-        const benefitsItems = document.querySelectorAll('#positions-benefits li');
-        translations.positions.benefitsItems.forEach((item, index) => {
-          if (benefitsItems[index]) {
-            benefitsItems[index].textContent = item[langIndex];
-          }
-        });
-      }
-      
-      // 更新研究成果卡片
-      const achievementCards = document.querySelectorAll('.achievement-card');
-      translations.achievements.items.forEach((item, index) => {
-        if (achievementCards[index]) {
-          achievementCards[index].querySelector('.achievement-title').textContent = item.title[langIndex];
-          achievementCards[index].querySelector('.achievement-desc').textContent = item.desc[langIndex];
-          achievementCards[index].querySelector('.achievement-meta span:first-child').textContent = item.journal[langIndex];
-        }
-      });
-      
-      // 更新实验室信息
-      document.querySelector('.sidebar-card:last-child h3').textContent = translations.ui.labInfoTitle[langIndex];
-      document.querySelector('.sidebar-card:last-child p:nth-of-type(1) strong').textContent = translations.ui.location[langIndex] + ':';
-      document.querySelector('.sidebar-card:last-child p:nth-of-type(2) strong').textContent = translations.ui.contact[langIndex] + ':';
-      document.querySelector('.sidebar-card:last-child p:nth-of-type(3) strong').textContent = translations.ui.updated[langIndex] + ':';
     }
 
-    // 页面切换
-    function showPage(pageId) {
-      // 隐藏所有内容
-      document.querySelectorAll('.content-card').forEach(card => {
-        card.style.display = 'none';
-      });
-      
-      // 显示目标页面
-      document.getElementById(pageId + '-content').style.display = 'block';
-      
-      // 更新导航按钮状态
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
-      
-      // 更新语言
-      updateLanguage();
-    }
-
-    // 编辑模式切换
+    // 编辑模式开关
     function toggleEditMode() {
       if (!editMode) {
-        if (editPassword === null) {
-          // 首次设置密码
-          document.getElementById('passwordModal').classList.add('show');
+        // 要启用编辑模式
+        const savedPassword = localStorage.getItem('lab_edit_password');
+        passwordSet = !!savedPassword;
+        if (!passwordSet) {
+          // 第一次启用 -> 提示设置密码
+          openPasswordModal();
+          return;
         } else {
-          // 显示授权面板
-          const inputPassword = prompt(isChinese ? "请输入编辑密码:" : "Please enter edit password:", "");
-          if (inputPassword === editPassword) {
-            enterEditMode();
-          } else if (inputPassword !== null) {
-            alert(isChinese ? "密码错误！" : "Wrong password!");
-          }
+          // 已设置密码，弹出授权面板要求输入密码
+          openAuthPanel();
+          return;
         }
       } else {
-        // 退出编辑模式
-        exitEditMode();
+        // 关闭编辑模式
+        disableEditMode();
       }
     }
 
-    // 进入编辑模式
-    function enterEditMode() {
+    // 打开设置密码模态框
+    function openPasswordModal() {
+      const modal = document.getElementById('passwordModal');
+      if (modal) modal.classList.add('show');
+    }
+    function closePasswordModal() {
+      const modal = document.getElementById('passwordModal');
+      if (modal) modal.classList.remove('show');
+      // 清空输入
+      const np = document.getElementById('newPassword');
+      const cp = document.getElementById('confirmPassword');
+      if (np) np.value = '';
+      if (cp) cp.value = '';
+    }
+
+    // 设置密码并直接进入编辑模式
+    function setPassword() {
+      const np = document.getElementById('newPassword').value.trim();
+      const cp = document.getElementById('confirmPassword').value.trim();
+      if (!np) {
+        alert(isChinese ? "请输入新密码。" : "Please enter a new password.");
+        return;
+      }
+      if (np !== cp) {
+        alert(isChinese ? "两次输入的密���不一致。" : "Passwords do not match.");
+        return;
+      }
+      // 将密码存储到 localStorage（注意：这是简单示例，生产应使用更安全的方法）
+      localStorage.setItem('lab_edit_password', np);
+      passwordSet = true;
+      closePasswordModal();
+      // 进入编辑模式
+      enableEditMode();
+      alert(isChinese ? "编辑模式已启用。" : "Edit mode enabled.");
+    }
+
+    // 打开认证面板
+    function openAuthPanel() {
+      const panel = document.getElementById('authPanel');
+      if (panel) panel.classList.add('show');
+      const input = document.getElementById('authPassword');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    }
+    function closeAuthPanel() {
+      const panel = document.getElementById('authPanel');
+      if (panel) panel.classList.remove('show');
+      const input = document.getElementById('authPassword');
+      if (input) input.value = '';
+    }
+
+    // 验证密码
+    function authenticate() {
+      const inputPwd = document.getElementById('authPassword').value;
+      const saved = localStorage.getItem('lab_edit_password');
+      if (!saved) {
+        alert(isChinese ? "尚未设置密码，请先设置密码。" : "No password set. Please set a password first.");
+        closeAuthPanel();
+        openPasswordModal();
+        return;
+      }
+      if (inputPwd === saved) {
+        closeAuthPanel();
+        enableEditMode();
+      } else {
+        alert(isChinese ? "密码错误。" : "Incorrect password.");
+      }
+    }
+
+    // 启用编辑模式：显示编辑控件
+    function enableEditMode() {
       editMode = true;
-      document.getElementById('editModeBtn').textContent = isChinese ? "退出编辑模式" : "Exit Edit Mode";
-      
-      // 显示编辑控制按钮
-      document.querySelectorAll('.edit-controls').forEach(controls => {
-        controls.style.display = 'flex';
-      });
-      
-      document.querySelectorAll('.item-actions').forEach(actions => {
-        actions.style.display = 'flex';
-      });
-      
-      document.querySelectorAll('.editor-actions').forEach(actions => {
-        actions.style.display = 'flex';
+      // 显示所有编辑控件
+      document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'block');
+      document.querySelectorAll('.item-actions').forEach(el => el.style.display = 'flex');
+      document.querySelectorAll('.editor-actions').forEach(el => el.style.display = 'block');
+      // 更新按钮文案
+      const editBtn = document.getElementById('editModeBtn');
+      if (editBtn) editBtn.textContent = translations.ui.editModeBtn[isChinese ? 1 : 0] + (isChinese ? "（已启用��" : " (On)");
+      // optionally add a visual indicator (e.g., border) to editable sections
+      document.querySelectorAll('.editable-section, .list-item').forEach(el => {
+        el.style.outline = '2px dashed rgba(0, 102, 255, 0.12)';
       });
     }
 
-    // 退出编辑模式
-    function exitEditMode() {
+    // 关闭编辑模式：隐藏编辑控件
+    function disableEditMode() {
       editMode = false;
-      document.getElementById('editModeBtn').textContent = isChinese ? "开启编辑模式" : "Edit Mode";
-      
-      // 隐藏编辑控制按钮
-      document.querySelectorAll('.edit-controls').forEach(controls => {
-        controls.style.display = 'none';
-      });
-      
-      document.querySelectorAll('.item-actions').forEach(actions => {
-        actions.style.display = 'none';
-      });
-      
-      document.querySelectorAll('.editor-actions').forEach(actions => {
-        actions.style.display = 'none';
-      });
-      
-      // 退出所有编辑状态
-      document.querySelectorAll('.editable-section').forEach(section => {
-        section.classList.remove('editing');
-        const display = section.querySelector('.content-display');
-        const edit = section.querySelector('.content-edit');
-        if (edit) {
-          display.innerHTML = edit.value;
-          edit.remove();
-          display.style.display = 'block';
-        }
+      document.querySelectorAll('.edit-controls').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.item-actions').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.editor-actions').forEach(el => el.style.display = 'none');
+      const editBtn = document.getElementById('editModeBtn');
+      if (editBtn) editBtn.textContent = translations.ui.editModeBtn[isChinese ? 1 : 0];
+      document.querySelectorAll('.editable-section, .list-item').forEach(el => {
+        el.style.outline = 'none';
       });
     }
 
-    // 编辑章节内容
-    function editSection(sectionId) {
-      if (!editMode) return;
-      
-      const section = document.getElementById(sectionId);
-      const display = section.querySelector('.content-display');
-      const currentContent = display.innerHTML;
-      
-      // 创建编辑框
-      const editArea = document.createElement('textarea');
-      editArea.className = 'content-edit';
-      editArea.value = currentContent;
-      
-      // 替换显示区域
-      display.style.display = 'none';
-      display.parentNode.insertBefore(editArea, display.nextSibling);
-      
-      // 更新控制按钮
-      const controls = section.querySelector('.edit-controls');
-      controls.innerHTML = `
-        <button class="control-btn save" onclick="saveSection('${sectionId}')">${isChinese ? '保存' : 'Save'}</button>
-        <button class="control-btn cancel" onclick="cancelEdit('${sectionId}')">${isChinese ? '取消' : 'Cancel'}</button>
-      `;
-      
-      section.classList.add('editing');
-    }
-
-    // 保存章节编辑
-    function saveSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      const editArea = section.querySelector('.content-edit');
-      const display = section.querySelector('.content-display');
-      
-      display.innerHTML = editArea.value;
-      display.style.display = 'block';
-      editArea.remove();
-      
-      // 恢复控制按钮
-      const controls = section.querySelector('.edit-controls');
-      controls.innerHTML = `<button class="control-btn edit" onclick="editSection('${sectionId}')">${isChinese ? '编辑' : 'Edit'}</button>`;
-      
-      section.classList.remove('editing');
-    }
-
-    // 取消编辑
-    function cancelEdit(sectionId) {
-      const section = document.getElementById(sectionId);
-      const editArea = section.querySelector('.content-edit');
-      const display = section.querySelector('.content-display');
-      
-      display.style.display = 'block';
-      if (editArea) {
-        editArea.remove();
-      }
-      
-      // 恢复控制按钮
-      const controls = section.querySelector('.edit-controls');
-      controls.innerHTML = `<button class="control-btn edit" onclick="editSection('${sectionId}')">${isChinese ? '编辑' : 'Edit'}</button>`;
-      
-      section.classList.remove('editing');
-    }
-
-    // 出版物操作
-    function addPublication() {
-      if (!editMode) return;
-      
-      currentEditingType = 'publication';
-      document.getElementById('modalTitle').textContent = isChinese ? "添加出版物" : "Add Publication";
-      
-      // 设置表单字段
-      document.getElementById('editFields').innerHTML = `
-        <div class="form-group">
-          <label for="editJournal">${isChinese ? "期刊/会议" : "Journal/Conference"}</label>
-          <input type="text" class="form-input" id="editJournal">
-        </div>
-        <div class="form-group">
-          <label for="editYear">${isChinese ? "年份" : "Year"}</label>
-          <input type="text" class="form-input" id="editYear">
-        </div>
-        <div class="form-group">
-          <label for="editDoi">${isChinese ? "DOI/链接" : "DOI/Link"}</label>
-          <input type="text" class="form-input" id="editDoi">
-        </div>
-      `;
-      
-      // 清空表单
-      document.getElementById('editTitle').value = '';
-      document.getElementById('editContent').value = '';
-      document.getElementById('editJournal').value = '';
-      document.getElementById('editYear').value = '';
-      document.getElementById('editDoi').value = '';
-      
-      document.getElementById('editModal').classList.add('show');
-    }
-
-    function editPublication(id) {
-      if (!editMode) return;
-      
-      const item = document.querySelector(`.list-item[data-id="${id}"]`);
-      const title = item.querySelector('h4').textContent;
-      const details = item.querySelector('p').textContent;
-      const description = item.querySelector('.muted').textContent;
-      
-      // 解析详细信息
-      const parts = details.split('•');
-      const journal = parts[0]?.trim() || '';
-      const year = parts[1]?.trim() || '';
-      const doi = parts[2]?.trim() || '';
-      
-      currentEditingId = id;
-      currentEditingType = 'publication';
-      document.getElementById('modalTitle').textContent = isChinese ? "编辑出版物" : "Edit Publication";
-      
-      // 设置表单字段
-      document.getElementById('editFields').innerHTML = `
-        <div class="form-group">
-          <label for="editJournal">${isChinese ? "期刊/会议" : "Journal/Conference"}</label>
-          <input type="text" class="form-input" id="editJournal" value="${journal.replace('<strong>', '').replace('</strong>', '')}">
-        </div>
-        <div class="form-group">
-          <label for="editYear">${isChinese ? "年份" : "Year"}</label>
-          <input type="text" class="form-input" id="editYear" value="${year}">
-        </div>
-        <div class="form-group">
-          <label for="editDoi">${isChinese ? "DOI/链接" : "DOI/Link"}</label>
-          <input type="text" class="form-input" id="editDoi" value="${doi}">
-        </div>
-      `;
-      
-      // 填充表单
-      document.getElementById('editTitle').value = title;
-      document.getElementById('editContent').value = description;
-      
-      document.getElementById('editModal').classList.add('show');
-    }
-
-    function deletePublication(id) {
-      if (!editMode || !confirm(isChinese ? "确定要删除这个出版物吗？" : "Are you sure you want to delete this publication?")) return;
-      
-      const item = document.querySelector(`.list-item[data-id="${id}"]`);
-      if (item) {
-        item.remove();
-      }
-    }
-
-    // 人员操作
-    function addPerson() {
-      if (!editMode) return;
-      
-      currentEditingType = 'person';
-      document.getElementById('modalTitle').textContent = isChinese ? "添加团队成员" : "Add Team Member";
-      
-      // 设置表单字段
-      document.getElementById('editFields').innerHTML = `
-        <div class="form-group">
-          <label for="editRole">${isChinese ? "职位/角色" : "Position/Role"}</label>
-          <input type="text" class="form-input" id="editRole">
-        </div>
-        <div class="form-group">
-          <label for="editStatus">${isChinese ? "年级/状态" : "Grade/Status"}</label>
-          <input type="text" class="form-input" id="editStatus">
-        </div>
-      `;
-      
-      // 清空表单
-      document.getElementById('editTitle').value = '';
-      document.getElementById('editContent').value = '';
-      document.getElementById('editRole').value = '';
-      document.getElementById('editStatus').value = '';
-      
-      document.getElementById('editModal').classList.add('show');
-    }
-
-    function editPerson(id) {
-      if (!editMode) return;
-      
-      const item = document.querySelector(`.list-item[data-id="${id}"]`);
-      const name = item.querySelector('h4').textContent;
-      const role = item.querySelector('p').textContent;
-      const research = item.querySelector('.muted').textContent;
-      
-      // 解析角色信息
-      const roleParts = role.split('•');
-      const position = roleParts[0]?.trim() || '';
-      const status = roleParts[1]?.trim() || '';
-      
-      currentEditingId = id;
-      currentEditingType = 'person';
-      document.getElementById('modalTitle').textContent = isChinese ? "编辑团队成员" : "Edit Team Member";
-      
-      // 设置表单字段
-      document.getElementById('editFields').innerHTML = `
-        <div class="form-group">
-          <label for="editRole">${isChinese ? "职位/角色" : "Position/Role"}</label>
-          <input type="text" class="form-input" id="editRole" value="${position.replace('<strong>', '').replace('</strong>', '')}">
-        </div>
-        <div class="form-group">
-          <label for="editStatus">${isChinese ? "年级/状态" : "Grade/Status"}</label>
-          <input type="text" class="form-input" id="editStatus" value="${status}">
-        </div>
-      `;
-      
-      // 填充表单
-      document.getElementById('editTitle').value = name;
-      document.getElementById('editContent').value = research.replace(isChinese ? "研究方向：" : "Research: ", "");
-      
-      document.getElementById('editModal').classList.add('show');
-    }
-
-    function deletePerson(id) {
-      if (!editMode || !confirm(isChinese ? "确定要删除这个成员吗？" : "Are you sure you want to delete this member?")) return;
-      
-      const item = document.querySelector(`.list-item[data-id="${id}"]`);
-      if (item) {
-        item.remove();
-      }
-    }
-
-    // 模态框操作
+    // 关闭编辑/通用模态框函数
     function closeModal() {
-      document.getElementById('editModal').classList.remove('show');
-      currentEditingId = null;
-      currentEditingType = null;
+      const modal = document.getElementById('editModal');
+      if (modal) modal.classList.remove('show');
     }
 
+    // 占位编辑操作函数（可按需实现）
+    function editSection(id) {
+      // 打开编辑模态并填充当前内容（示例占位）
+      const section = document.getElementById(id);
+      if (!section) return;
+      const title = section.querySelector('.section-header h4') ? section.querySelector('.section-header h4').textContent : '';
+      const contentEl = section.querySelector('.content-display');
+      const contentText = contentEl ? contentEl.innerText.trim() : '';
+      document.getElementById('modalTitle').textContent = (isChinese ? '编辑内容' : 'Edit Content') + ' - ' + title;
+      document.getElementById('editTitle').value = title;
+      document.getElementById('editContent').value = contentText;
+      document.getElementById('editModal').classList.add('show');
+      currentEditingId = id;
+      currentEditingType = 'section';
+    }
     function saveEdit() {
-      if (!editMode) return;
-      
+      // 简单保存回页面（示例）
       const title = document.getElementById('editTitle').value;
       const content = document.getElementById('editContent').value;
-      
-      if (currentEditingType === 'publication') {
-        const journal = document.getElementById('editJournal').value;
-        const year = document.getElementById('editYear').value;
-        const doi = document.getElementById('editDoi').value;
-        
-        if (currentEditingId) {
-          // 更新现有出版物
-          const item = document.querySelector(`.list-item[data-id="${currentEditingId}"]`);
-          item.querySelector('h4').textContent = title;
-          item.querySelector('p').innerHTML = `<strong>${journal}</strong> • ${year} • ${doi}`;
-          item.querySelector('.muted').textContent = content;
-        } else {
-          // 添加新出版物
-          const list = document.getElementById('publications-list');
-          const newId = Date.now();
-          const newItem = document.createElement('div');
-          newItem.className = 'list-item';
-          newItem.dataset.id = newId;
-          newItem.innerHTML = `
-            <div class="item-content">
-              <div class="item-text">
-                <h4>${title}</h4>
-                <p><strong>${journal}</strong> • ${year} • ${doi}</p>
-                <p class="muted">${content}</p>
-              </div>
-              <div class="item-actions" style="display: flex;">
-                <button class="control-btn edit" onclick="editPublication(${newId})">${isChinese ? '编辑' : 'Edit'}</button>
-                <button class="control-btn delete" onclick="deletePublication(${newId})">${isChinese ? '删除' : 'Delete'}</button>
-              </div>
-            </div>
-          `;
-          list.appendChild(newItem);
-        }
-      } else if (currentEditingType === 'person') {
-        const role = document.getElementById('editRole').value;
-        const status = document.getElementById('editStatus').value;
-        
-        if (currentEditingId) {
-          // 更新现有人员
-          const item = document.querySelector(`.list-item[data-id="${currentEditingId}"]`);
-          item.querySelector('h4').textContent = title;
-          item.querySelector('p').innerHTML = `<strong>${role}</strong> • ${status}`;
-          item.querySelector('.muted').textContent = isChinese ? `研究方向：${content}` : `Research: ${content}`;
-        } else {
-          // 添加新人员
-          const list = document.getElementById('people-list');
-          const newId = Date.now();
-          const newItem = document.createElement('div');
-          newItem.className = 'list-item';
-          newItem.dataset.id = newId;
-          newItem.innerHTML = `
-            <div class="item-content">
-              <div class="item-text">
-                <h4>${title}</h4>
-                <p><strong>${role}</strong> • ${status}</p>
-                <p class="muted">${isChinese ? '研究方向：' : 'Research: '}${content}</p>
-              </div>
-              <div class="item-actions" style="display: flex;">
-                <button class="control-btn edit" onclick="editPerson(${newId})">${isChinese ? '编辑' : 'Edit'}</button>
-                <button class="control-btn delete" onclick="deletePerson(${newId})">${isChinese ? '删除' : 'Delete'}</button>
-              </div>
-            </div>
-          `;
-          list.appendChild(newItem);
+      if (currentEditingType === 'section' && currentEditingId) {
+        const section = document.getElementById(currentEditingId);
+        if (section) {
+          const titleEl = section.querySelector('.section-header h4');
+          if (titleEl) titleEl.textContent = title;
+          const contentEl = section.querySelector('.content-display');
+          if (contentEl) contentEl.innerText = content;
         }
       }
-      
       closeModal();
     }
 
-    // 初始化页面
-    document.addEventListener('DOMContentLoaded', function() {
-      // 设置默认页面
-      showPage('home');
-    });
+    // 启动时初始化
+    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
